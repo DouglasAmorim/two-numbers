@@ -7,6 +7,13 @@
 
 import Foundation
 
+extension Collection {
+    /// Returns the element at the specified index if it is within bounds, otherwise nil.
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
 public class ListNode {
      public var val: Int
      public var next: ListNode?
@@ -32,37 +39,58 @@ class TwoNumbers {
     // possible solution create 2 arrays of int
     func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
          if var l1ActualNode = l1, var l2ActualNode = l2 {
-             var l1NumberS: String = ""
-             var l2NumberS: String = ""
-
+             var l1Array: [Int] = []
+             var l2Array: [Int] = []
+             
              if l1ActualNode.next == nil {
-                l1NumberS = String(l1ActualNode.val)
+                 l1Array.append(l1ActualNode.val)
              } else {
                  while l1ActualNode.next != nil {
-                     l1NumberS = String(l1ActualNode.val) + l1NumberS
+                     l1Array.append(l1ActualNode.val)
                      l1ActualNode = l1ActualNode.next!
                  }
                  
-                 l1NumberS = String(l1ActualNode.val) + l1NumberS
+                 l1Array.append(l1ActualNode.val)
              }
-
-
+             
              if l2ActualNode.next == nil {
-                 l2NumberS = String(l2ActualNode.val)
+                 l2Array.append(l2ActualNode.val)
              } else {
                  while l2ActualNode.next != nil {
-                     l2NumberS = String(l2ActualNode.val) + l2NumberS
+                     l2Array.append(l2ActualNode.val)
                      l2ActualNode = l2ActualNode.next!
                  }
                  
-                 l2NumberS = String(l2ActualNode.val) + l2NumberS
+                 l2Array.append(l2ActualNode.val)
+             }
+             
+             let maxCount = max(l1Array.count, l2Array.count)
+             var leftoverSum: Int = 0
+             var awnserArray:[Int] = []
+             
+             for i in 0..<maxCount {
+                 let n1: Int = l1Array[safe: i] ?? 0
+                 let n2: Int = l2Array[safe: i] ?? 0
+                 
+                 var sum = n1 + n2 + leftoverSum
+                 
+                 if sum >= 10 {
+                     awnserArray.append(sum - 10)
+                     leftoverSum = 1
+                     
+                 } else {
+                     awnserArray.append(sum)
+                     leftoverSum = 0
+                 }
              }
 
-             let sum = (Int(l2NumberS) ?? 0) + (Int(l1NumberS) ?? 0)
-
+             if leftoverSum != 0 {
+                 awnserArray.append(leftoverSum)
+             }
+             
              var listNode: ListNode? = nil
-             for value in String(sum) {
-                 let aux: ListNode = ListNode(Int(String(value)) ?? 0, listNode)
+             for value in awnserArray.reversed() {
+                 let aux: ListNode = ListNode(value, listNode)
                  listNode = aux
              }
 
