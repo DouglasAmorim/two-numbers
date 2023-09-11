@@ -15,7 +15,7 @@ struct ContentView: View {
         let l22 = ListNode(2, l21)
         
         TwoNumbers()
-            .addTwoNumbers(l1, l22)
+            .recursiveApproach(l1, l22)
     }
     
     var body: some View {

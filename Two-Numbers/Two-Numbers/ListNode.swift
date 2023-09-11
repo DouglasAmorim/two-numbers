@@ -35,8 +35,6 @@ public class ListNode {
 }
 
 class TwoNumbers {
-    // THIS SOLUTION HAS A PROBLEM WITH UINT64 SIZE
-    // possible solution create 2 arrays of int
     func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
          if var l1ActualNode = l1, var l2ActualNode = l2 {
              var l1Array: [Int] = []
@@ -72,7 +70,7 @@ class TwoNumbers {
                  let n1: Int = l1Array[safe: i] ?? 0
                  let n2: Int = l2Array[safe: i] ?? 0
                  
-                 var sum = n1 + n2 + leftoverSum
+                 let sum = n1 + n2 + leftoverSum
                  
                  if sum >= 10 {
                      awnserArray.append(sum - 10)
@@ -99,4 +97,17 @@ class TwoNumbers {
 
          return nil
      }
+    
+    private var leftOver = 0
+
+    func recursiveApproach(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+        if l1 == nil && l2 == nil && leftOver == 0 {
+            return nil
+        }
+
+        let sum = (l1?.val ?? 0) + (l2?.val ?? 0) + leftOver
+        leftOver = sum / 10
+
+        return .init(sum % 10, addTwoNumbers(l1?.next, l2?.next))
+    }
 }
